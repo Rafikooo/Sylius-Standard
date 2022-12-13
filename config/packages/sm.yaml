@@ -1,0 +1,9 @@
+winzou_state_machine:
+    sylius_order:
+        callbacks:
+            after:
+                sylis_cancel_order:
+                    on: [ "cancel" ]
+                    do: [ "@App\\Services\\MyOrderInventoryOperator", "cancel2" ]
+                    args: [ "object" ]
+                    priority: 600

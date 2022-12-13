@@ -403,9 +403,6 @@
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
     },
-    "phpseclib/phpseclib": {
-        "version": "2.0.30"
-    },
     "phpspec/php-diff": {
         "version": "v1.1.0"
     },
@@ -597,9 +594,6 @@
     },
     "sylius/mailer-bundle": {
         "version": "v1.4.4"
-    },
-    "sylius/paypal-plugin": {
-        "version": "v1.0.1"
     },
     "sylius/registry": {
         "version": "v1.4.1"
