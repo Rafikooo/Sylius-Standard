@@ -7,12 +7,28 @@ imports:
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
     - { resource: "@SyliusPayPalPlugin/Resources/config/config.yaml" }
 
+    - { resource: "@SyliusPlusPlugin/Resources/config/config.yaml" }
+
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
 
 when@dev:
     sylius_api:
         enabled: true
+        
+sylius_invoicing:
+    pdf_generator:
+        enabled: false
+sylius_refund:
+    pdf_generator:
+        enabled: false
+sylius_plus:
+    pdf_generator:
+        enabled: false
+    resources:
+        return_request:
+            classes:
+                model: App\Entity\Return\ReturnRequestDecorated
 
 sylius_addressing:
     resources:
