@@ -1,0 +1,7 @@
+app:
+    form:
+        gateway_configuration:
+            stripe:
+                label: Stripe
+                publishable_key: Publishable key
+                secret_key: Secret key
