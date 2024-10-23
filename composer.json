@@ -26,6 +26,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "stripe/stripe-php": "^16.1",
         "sylius/sylius": "v2.0.0-beta.1",
         "symfony/dotenv": "^6.4 || ^7.1",
         "symfony/flex": "^2.4",
