@@ -12,6 +12,7 @@ framework:
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+            App\Command\CaptureStripePaymentRequest: payment_request
 
 # when@test:
 #    framework:
