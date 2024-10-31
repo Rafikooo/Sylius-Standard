@@ -16,6 +16,10 @@
 /compose.override.yml
 /docker/mysql/data/
 
+###> sylius/sylius ###
+/config/encryption/dev.key
+###< sylius/sylius ###
+
 ###> symfony/framework-bundle ###
 /composer.lock
 /.env.*.local
