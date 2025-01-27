@@ -8,7 +8,7 @@ SUPPORTED_PLUGINS = \
   plus-rbac-plugin \
   price-history-plugin \
   return-plugin \
-  marketplace-plugin \
+  plus-marketplace-suite-plugin
 
 .PHONY: list-sylius-plugins
 list-sylius-plugins:
@@ -48,6 +48,9 @@ install-sylius-plugin:
 	  composer config --global http-basic.sylius.repo.packagist.com token "$$SYLIUS_PACKAGIST_TOKEN" || \
 	    (echo -e "\033[1;31mError: Failed to set the token. Check if the token is valid.\033[0m"; exit 1); \
 	fi; \
+	echo -e "\033[1;32mValidating token...\033[0m"; \
+	curl -sf -u token:$$SYLIUS_PACKAGIST_TOKEN https://sylius.repo.packagist.com/sylius/packages.json > /dev/null || \
+	  (echo -e "\033[1;31mError: Invalid token provided. Aborting.\033[0m"; exit 1); \
 	echo -e "\033[1;32mConfiguring Sylius repository...\033[0m"; \
 	composer config repositories.sylius composer https://sylius.repo.packagist.com/sylius/ || \
 	  (echo -e "\033[1;31mError: Failed to configure the Sylius repository.\033[0m"; exit 1); \
