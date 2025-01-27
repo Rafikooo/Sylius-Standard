@@ -8,7 +8,7 @@ SUPPORTED_PLUGINS = \
   plus-rbac-plugin \
   price-history-plugin \
   return-plugin \
-  plus-marketplace-suite-plugin
+  marketplace-plugin
 
 .PHONY: list-sylius-plugins
 list-sylius-plugins:
