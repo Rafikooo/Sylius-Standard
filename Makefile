@@ -45,3 +45,5 @@ docker-compose-check:
 	@which $(DOCKER_COMPOSE) > /dev/null || (echo "Please install docker compose binary" && exit 1)
 	@echo "You are using \"$(DOCKER_COMPOSE)\" binary"
 	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
+
+include sylius-plugins.mk
