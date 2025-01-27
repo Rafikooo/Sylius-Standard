@@ -48,14 +48,12 @@ install-sylius-plugin:
 	  composer config --global http-basic.sylius.repo.packagist.com token "$$SYLIUS_PACKAGIST_TOKEN" || \
 	    (echo -e "\033[1;31mError: Failed to set the token. Check if the token is valid.\033[0m"; exit 1); \
 	fi; \
+	echo -e "\033[1;32mConfiguring Sylius repository...\033[0m"; \
 	composer config repositories.sylius composer https://sylius.repo.packagist.com/sylius/ || \
 	  (echo -e "\033[1;31mError: Failed to configure the Sylius repository.\033[0m"; exit 1); \
-	composer require $(PLUGIN) 2>/tmp/sylius_error.log || \
+	echo -e "\033[1;32mInstalling plugin '$(PLUGIN)'...\033[0m"; \
+	composer require $(PLUGIN) || \
 	  (echo -e "\033[1;31mError: Failed to install plugin '$(PLUGIN)'.\033[0m"; \
 	   echo -e "\033[1;33mCheck the token or plugin name.\033[0m"; \
-	   echo -e "\033[1;33mError details:\033[0m"; \
-	   cat /tmp/sylius_error.log; \
-	   rm -f /tmp/sylius_error.log; \
 	   exit 1); \
-	rm -f /tmp/sylius_error.log; \
 	echo -e "\033[1;32mPlugin '$(PLUGIN)' installed successfully.\033[0m"
