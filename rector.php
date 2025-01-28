@@ -3,12 +3,10 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Sylius\SyliusRector\Set\SyliusMarketplace;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->importNames();
-    $rectorConfig->removeUnusedImports();
-    $rectorConfig->import(__DIR__ . '/vendor/sylius/sylius-rector/config/config.php');
-    $rectorConfig->paths([
-        __DIR__ . '/src'
-    ]);
-};
+return RectorConfig::configure()
+    ->withPaths([__DIR__ . '/src'])
+    ->withSets([SyliusMarketplace::MARKETPLACE_PLUGIN])
+    ->withImportNames(removeUnusedImports: true)
+;
