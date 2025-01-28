@@ -90,7 +90,7 @@
             "allow-contrib": false,
             "require": "^6.4",
             "endpoint": [
-                "https://api.github.com/repos/Rafikooo/SyliusRecipes/contents/index.json?ref=main",
+                "https://api.github.com/repos/Rafikooo/SyliusRecipes/contents/index.json?ref=flex/main",
                 "flex://defaults"
             ]
         }
