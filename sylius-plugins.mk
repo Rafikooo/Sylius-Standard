@@ -55,7 +55,13 @@ install-sylius-plugin:
 	vendor/bin/rector process src --no-progress-bar --no-diffs  || \
 	  (echo -e "\033[1;31mError: Rector process failed.\033[0m"; exit 1); \
 	echo -e "\033[1;32mRector process completed successfully.\033[0m"; \
+
 	echo -e "\033[1;32mWarming up Symfony cache...\033[0m"; \
 	bin/console cache:warmup || \
 	  (echo -e "\033[1;31mError: Cache warmup failed.\033[0m"; exit 1); \
 	echo -e "\033[1;32mCache warmed up successfully.\033[0m"
+
+	echo -e "\033[1;32mRunning migrations...\033[0m"; \
+	bin/console doctrine:migrations:migrate --no-interaction || \
+	  (echo -e "\033[1;31mError: Migrations failed.\033[0m"; exit 1); \
+	echo -e "\033[1;32mMigrations completed successfully.\033[0m"; \
