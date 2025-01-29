@@ -1,13 +1,4 @@
 SUPPORTED_PLUGINS = \
-  b2b-kit \
-  customer-service-plugin \
-  loyalty-plugin \
-  multi-source-inventory-plugin \
-  multi-store-plugin \
-  one-page-checkout-plugin \
-  plus-rbac-plugin \
-  price-history-plugin \
-  return-plugin \
   marketplace-plugin
 
 .PHONY: list-sylius-plugins
