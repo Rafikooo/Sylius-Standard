@@ -54,6 +54,8 @@ install-sylius-plugin:
 	echo -e "\033[1;32mRunning Rector for code cleanup...\033[0m"; \
 	vendor/bin/rector process src || \
 	  (echo -e "\033[1;31mError: Rector process failed.\033[0m"; exit 1); \
-	vendor/bin/rector process src || \
-	  (echo -e "\033[1;31mError: Rector process failed.\033[0m"; exit 1); \
-	echo -e "\033[1;32mRector process completed successfully.\033[0m"
+	echo -e "\033[1;32mRector process completed successfully.\033[0m"; \
+	echo -e "\033[1;32mWarming up Symfony cache...\033[0m"; \
+	bin/console cache:warmup || \
+	  (echo -e "\033[1;31mError: Cache warmup failed.\033[0m"; exit 1); \
+	echo -e "\033[1;32mCache warmed up successfully.\033[0m"
