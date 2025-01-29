@@ -1,14 +1,10 @@
 SUPPORTED_PLUGINS = \
   marketplace-plugin
 
-.PHONY: list-sylius-plugins
-list-sylius-plugins:
-	@echo -e "\033[1;32mAvailable Sylius Plugins:\033[0m"
-	@echo "$(SUPPORTED_PLUGINS)" | tr ' ' '\n'
-
 .PHONY: install-sylius-plugin
 install-sylius-plugin:
-	@if [ -z "$(PLUGIN)" ]; then \
+	@set -e; \
+	if [ -z "$(PLUGIN)" ]; then \
 	  if ! command -v fzf >/dev/null 2>&1; then \
 	    echo -e "\033[1;31mError: 'fzf' is not installed. Please install it to enable interactive selection.\033[0m"; \
 	    exit 1; \
@@ -52,16 +48,42 @@ install-sylius-plugin:
 	   exit 1); \
 	echo -e "\033[1;32mPlugin '$(PLUGIN)' installed successfully.\033[0m"; \
 	echo -e "\033[1;32mRunning Rector for code cleanup...\033[0m"; \
-	vendor/bin/rector process src --no-progress-bar --no-diffs  || \
+	vendor/bin/rector process src --no-progress-bar --no-diffs || \
 	  (echo -e "\033[1;31mError: Rector process failed.\033[0m"; exit 1); \
 	echo -e "\033[1;32mRector process completed successfully.\033[0m"; \
 
 	echo -e "\033[1;32mWarming up Symfony cache...\033[0m"; \
 	bin/console cache:warmup || \
 	  (echo -e "\033[1;31mError: Cache warmup failed.\033[0m"; exit 1); \
-	echo -e "\033[1;32mCache warmed up successfully.\033[0m"
+	echo -e "\033[1;32mCache warmed up successfully.\033[0m"; \
 
 	echo -e "\033[1;32mRunning migrations...\033[0m"; \
 	bin/console doctrine:migrations:migrate --no-interaction || \
 	  (echo -e "\033[1;31mError: Migrations failed.\033[0m"; exit 1); \
 	echo -e "\033[1;32mMigrations completed successfully.\033[0m"; \
+
+	echo "Copying required Sylius templates..."
+
+	TEMPLATES="\
+		bundles/SyliusAdminBundle/Order/Show/Summary/_totals.html.twig \
+		bundles/SyliusAdminBundle/Product/Show/_header.html.twig \
+		bundles/SyliusCoreBundle/Email/Blocks/OrderConfirmation/_content.html.twig \
+		bundles/SyliusUiBundle/Modal/_confirmation.html.twig \
+		bundles/SyliusUiBundle/_flashes.html.twig \
+		bundles/SyliusShopBundle/Taxon/_horizontalMenu.html.twig \
+		bundles/SyliusShopBundle/Register/_header.html.twig \
+		bundles/SyliusShopBundle/ProductReview/create.html.twig \
+		bundles/SyliusShopBundle/Product/_box.html.twig \
+		bundles/SyliusShopBundle/Product/Show/_reviews.html.twig \
+		bundles/SyliusShopBundle/Order/_summary.html.twig \
+		bundles/SyliusShopBundle/Common/Form/_login.html.twig \
+		bundles/SyliusShopBundle/Checkout/_header.html.twig \
+		bundles/SyliusShopBundle/Account/Order/Show/_header.html.twig \
+	"
+
+	for file in $$TEMPLATES; do \
+		mkdir -p templates/$$(dirname $$file); \
+		cp vendor/sylius/plus-marketplace-suite-plugin/templates/$$file templates/$$file; \
+	done
+
+	echo "✅ Sylius templates copied successfully."
