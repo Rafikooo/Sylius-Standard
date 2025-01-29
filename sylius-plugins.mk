@@ -37,7 +37,7 @@ install-sylius-plugin:
 	  echo "$(SUPPORTED_PLUGINS)" | tr ' ' '\n'; \
 	  exit 1; \
 	fi; \
-	SYLIUS_PACKAGIST_TOKEN=$$(composer config --global http-basic.sylius.repo.packagist.com.token 2>/dev/null || echo ""); \
+	SYLIUS_PACKAGIST_TOKEN=$$(composer config --global --auth http-basic.sylius.repo.packagist.com.password 2>/dev/null || echo ""); \
 	if [ -z "$$SYLIUS_PACKAGIST_TOKEN" ]; then \
 	  echo -e "\033[1;33mNo SYLIUS_PACKAGIST_TOKEN found in Composer configuration.\033[0m"; \
 	  read -p "Enter your Sylius Packagist token: " SYLIUS_PACKAGIST_TOKEN; \
