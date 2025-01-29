@@ -147,10 +147,6 @@
         "symfony/polyfill-php80": "*"
     },
     "repositories": {
-        "sylius": {
-            "type": "composer",
-            "url": "https://sylius.repo.packagist.com/sylius/"
-        },
         "rector": {
             "type": "path",
             "url": "../SyliusRector"
