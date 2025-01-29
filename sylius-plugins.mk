@@ -88,6 +88,7 @@ install-sylius-plugin:
 
 	echo "✅ Sylius templates copied successfully."
 
+	echo "DEBUG: Asking user about optional templates..."
 	read -p "Do you want to copy optional marketplace templates (replace Sylius names with marketplace branding, update logos, etc.)? (y/n): " CONFIRM_COPY; \
 	if [ "$$CONFIRM_COPY" = "y" ]; then \
 	  OPTIONAL_TEMPLATES="\
