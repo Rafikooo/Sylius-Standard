@@ -87,3 +87,26 @@ install-sylius-plugin:
 	done
 
 	echo "✅ Sylius templates copied successfully."
+
+	read -p "Do you want to copy optional marketplace templates (replace Sylius names with marketplace branding, update logos, etc.)? (y/n): " CONFIRM_COPY; \
+	if [ "$$CONFIRM_COPY" = "y" ]; then \
+	  OPTIONAL_TEMPLATES="\
+		bundles/SyliusAdminBundle/Layout/_logo.html.twig \
+		bundles/SyliusAdminBundle/Layout/_notification.html.twig \
+		bundles/SyliusAdminBundle/Security/login.html.twig \
+		bundles/SyliusAdminBundle/layout.html.twig \
+		bundles/SyliusCoreBundle/Email/layout.html.twig \
+		bundles/SyliusUiBundle/Layout/centered.html.twig \
+		bundles/SyliusUiBundle/Security/_logo.html.twig \
+		bundles/TwigBundle/Exception \
+		bundles/SyliusShopBundle/Layout/Header/_logo.html.twig \
+		bundles/SyliusShopBundle/Homepage/_banner.html.twig \
+	  "; \
+	  for file in $$OPTIONAL_TEMPLATES; do \
+		mkdir -p templates/$$(dirname $$file); \
+		cp vendor/sylius/plus-marketplace-suite-plugin/templates/$$file templates/$$file; \
+	  done; \
+	  echo "✅ Optional marketplace templates copied successfully."; \
+	else \
+	  echo "❌ Skipping optional marketplace templates."; \
+	fi
