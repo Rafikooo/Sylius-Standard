@@ -3,7 +3,7 @@ SUPPORTED_PLUGINS = \
 
 .PHONY: install-sylius-plugin
 install-sylius-plugin:
-	@set -e; \
+	@set +x; \
 	if [ -z "$(PLUGIN)" ]; then \
 	  if ! command -v fzf >/dev/null 2>&1; then \
 	    echo -e "\033[1;31mError: 'fzf' is not installed. Please install it to enable interactive selection.\033[0m"; \
