@@ -110,3 +110,12 @@ install-sylius-plugin:
 	else \
 	  echo "❌ Skipping optional marketplace templates."; \
 	fi
+
+	echo -e "\033[1;32mUpdating webpack.config.js to include plugin assets...\033[0m"; \
+	if ! grep -q "syliusMarketplaceSuiteShop" webpack.config.js; then \
+	  sed -i'' -e "/module.exports = \[/i\const [syliusMarketplaceSuiteShop, syliusMarketplaceSuiteAdmin] = require('./vendor/sylius/plus-marketplace-suite-plugin/webpack.config');" webpack.config.js; \
+	  sed -i'' -e "/module.exports = \[/s/\[/[ syliusMarketplaceSuiteShop, syliusMarketplaceSuiteAdmin, /" webpack.config.js; \
+	  echo -e "\033[1;32mwebpack.config.js updated successfully.\033[0m"; \
+	else \
+	  echo -e "\033[1;33mwebpack.config.js already contains the required imports.\033[0m"; \
+	fi;
