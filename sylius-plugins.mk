@@ -46,7 +46,7 @@ install-sylius-plugin:
 	composer config repositories.sylius composer https://sylius.repo.packagist.com/sylius/ || \
 	  (echo -e "\033[1;31mError: Failed to configure the Sylius repository.\033[0m"; exit 1); \
 	echo -e "\033[1;32mInstalling plugin '$(PLUGIN)'...\033[0m"; \
-	composer require $(PLUGIN) --no-scripts || \
+	composer require $(PLUGIN) --no-scripts --no-interaction || \
 	  (echo -e "\033[1;31mError: Failed to install plugin '$(PLUGIN)'.\033[0m"; \
 	   echo -e "\033[1;33mCheck the token or plugin name.\033[0m"; \
 	   exit 1); \
