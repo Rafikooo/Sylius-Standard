@@ -12,7 +12,10 @@ install-sylius-plugin:
 	fi; \
 	if ! echo "$(SUPPORTED_PLUGINS)" | grep -w -q "$(PLUGIN)"; then \
 	  echo -e "\033[1;31mError:\033[0m The plugin '$(PLUGIN)' is not supported."; \
-	  echo "Supported plugins are: $(SUPPORTED_PLUGINS)"; \
+	  echo -e "\033[1;33mSupported plugins are:\033[0m"; \
+	  for sp in $(SUPPORTED_PLUGINS); do \
+		echo -e "  - \033[1;32m$$sp\033[0m"; \
+	  done; \
 	  exit 1; \
 	fi; \
 	\
