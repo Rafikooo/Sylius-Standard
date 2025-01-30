@@ -2,28 +2,21 @@ SUPPORTED_PLUGINS = \
   marketplace-plugin
 
 .PHONY: install-sylius-plugin
+SUPPORTED_PLUGINS = marketplace-plugin
+
+.PHONY: install-sylius-plugin
 install-sylius-plugin:
-	@set +x; \
-	if [ -z "$(PLUGIN)" ]; then \
-	  if ! command -v fzf >/dev/null 2>&1; then \
-	    echo -e "\033[1;31mError: 'fzf' is not installed. Please install it to enable interactive selection.\033[0m"; \
-	    exit 1; \
-	  fi; \
-	  echo -e "\033[1;32mAvailable Sylius Plugins:\033[0m"; \
-	  PLUGIN=$$(echo "$(SUPPORTED_PLUGINS)" | tr ' ' '\n' | fzf --prompt="Select a plugin to install: "); \
-	  if [ -z "$$PLUGIN" ]; then \
-	    echo -e "\033[1;31mNo plugin selected. Aborting.\033[0m"; \
-	    exit 1; \
-	  fi; \
-	  $(MAKE) install-sylius-plugin PLUGIN=$$PLUGIN; \
-	  exit 0; \
-	fi; \
-	if ! echo "$(SUPPORTED_PLUGINS)" | grep -w -q "$(PLUGIN)"; then \
-	  echo -e "\033[1;31mError: The selected plugin '$(PLUGIN)' is not supported.\033[0m"; \
-	  echo -e "\033[1;32mSupported plugins are:\033[0m"; \
-	  echo "$(SUPPORTED_PLUGINS)" | tr ' ' '\n'; \
+	@if [ -z "$(PLUGIN)" ]; then \
+	  echo "Error: No plugin specified. Please run:"; \
+	  echo "  make install-sylius-plugin PLUGIN=<plugin-name>"; \
 	  exit 1; \
 	fi; \
+	if ! echo "$(SUPPORTED_PLUGINS)" | grep -w -q "$(PLUGIN)"; then \
+	  echo "Error: The plugin '$(PLUGIN)' is not supported."; \
+	  echo "Supported plugins are: $(SUPPORTED_PLUGINS)"; \
+	  exit 1; \
+	fi; \
+
 	SYLIUS_PACKAGIST_TOKEN=$$(composer config --global --auth http-basic.sylius.repo.packagist.com.password 2>/dev/null || echo ""); \
 	if [ -z "$$SYLIUS_PACKAGIST_TOKEN" ]; then \
 	  echo -e "\033[1;33mNo SYLIUS_PACKAGIST_TOKEN found in Composer configuration.\033[0m"; \
@@ -111,12 +104,3 @@ install-sylius-plugin:
 	else \
 	  echo "❌ Skipping optional marketplace templates."; \
 	fi
-
-	echo -e "\033[1;32mUpdating webpack.config.js to include plugin assets...\033[0m"; \
-	if ! grep -q "syliusMarketplaceSuiteShop" webpack.config.js; then \
-	  sed -i'' -e "/module.exports = \[/i\const [syliusMarketplaceSuiteShop, syliusMarketplaceSuiteAdmin] = require('./vendor/sylius/plus-marketplace-suite-plugin/webpack.config');" webpack.config.js; \
-	  sed -i'' -e "/module.exports = \[/s/\[/[ syliusMarketplaceSuiteShop, syliusMarketplaceSuiteAdmin, /" webpack.config.js; \
-	  echo -e "\033[1;32mwebpack.config.js updated successfully.\033[0m"; \
-	else \
-	  echo -e "\033[1;33mwebpack.config.js already contains the required imports.\033[0m"; \
-	fi;
