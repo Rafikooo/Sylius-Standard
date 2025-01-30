@@ -3,6 +3,18 @@ SUPPORTED_PLUGINS = marketplace-plugin
 .PHONY: install-sylius-plugin
 install-sylius-plugin:
 	@set +x; \
+	\
+	UNCOMMITTED_CHANGES=$$(git status --porcelain); \
+	if [ -n "$$UNCOMMITTED_CHANGES" ]; then \
+	  echo -e "\n\033[1;31mUncommitted changes detected!\033[0m"; \
+	  echo "We advise you to commit or stash them before continuing."; \
+	  read -p "Do you still want to proceed? (y/n) " ANSWER; \
+	  if [ "$$ANSWER" != "y" ]; then \
+		echo -e "\033[1;31mAborted by user.\033[0m"; \
+		exit 1; \
+	  fi; \
+	fi; \
+	\
 	echo -e "\033[1;34m[Sylius Plugin Installer]\033[0m Checking 'PLUGIN' argument..."; \
 	if [ -z "$(PLUGIN)" ]; then \
 	  echo -e "\033[1;31mError:\033[0m No plugin specified."; \
