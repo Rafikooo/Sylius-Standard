@@ -1,22 +1,22 @@
-SUPPORTED_PLUGINS = \
-  marketplace-plugin
-
-.PHONY: install-sylius-plugin
 SUPPORTED_PLUGINS = marketplace-plugin
 
 .PHONY: install-sylius-plugin
 install-sylius-plugin:
-	@if [ -z "$(PLUGIN)" ]; then \
-	  echo "Error: No plugin specified. Please run:"; \
+	@set +x; \
+	echo -e "\033[1;34m[Sylius Plugin Installer] Checking 'PLUGIN' argument...\033[0m"; \
+	if [ -z "$(PLUGIN)" ]; then \
+	  echo -e "\033[1;31mError: No plugin specified.\033[0m"; \
+	  echo "Please run:"; \
 	  echo "  make install-sylius-plugin PLUGIN=<plugin-name>"; \
 	  exit 1; \
 	fi; \
 	if ! echo "$(SUPPORTED_PLUGINS)" | grep -w -q "$(PLUGIN)"; then \
-	  echo "Error: The plugin '$(PLUGIN)' is not supported."; \
+	  echo -e "\033[1;31mError: The plugin '$(PLUGIN)' is not supported.\033[0m"; \
 	  echo "Supported plugins are: $(SUPPORTED_PLUGINS)"; \
 	  exit 1; \
 	fi; \
-
+	\
+	echo -e "\033[1;34m[Sylius Plugin Installer] Checking Sylius Packagist token...\033[0m"; \
 	SYLIUS_PACKAGIST_TOKEN=$$(composer config --global --auth http-basic.sylius.repo.packagist.com.password 2>/dev/null || echo ""); \
 	if [ -z "$$SYLIUS_PACKAGIST_TOKEN" ]; then \
 	  echo -e "\033[1;33mNo SYLIUS_PACKAGIST_TOKEN found in Composer configuration.\033[0m"; \
@@ -25,38 +25,53 @@ install-sylius-plugin:
 	    echo -e "\033[1;31mNo token provided. Aborting.\033[0m"; \
 	    exit 1; \
 	  fi; \
-	  composer config --global http-basic.sylius.repo.packagist.com token "$$SYLIUS_PACKAGIST_TOKEN" || \
-	    (echo -e "\033[1;31mError: Failed to set the token. Check if the token is valid.\033[0m"; exit 1); \
+	  composer config --global http-basic.sylius.repo.packagist.com token "$$SYLIUS_PACKAGIST_TOKEN" || { \
+	    echo -e "\033[1;31mError: Failed to set the token.\033[0m"; \
+	    exit 1; \
+	  }; \
 	fi; \
 	echo -e "\033[1;32mValidating token...\033[0m"; \
-	curl -sf -u token:$$SYLIUS_PACKAGIST_TOKEN https://sylius.repo.packagist.com/sylius/packages.json > /dev/null || \
-	  (echo -e "\033[1;31mError: Invalid token provided. Aborting.\033[0m"; exit 1); \
-	echo -e "\033[1;32mConfiguring Sylius repository...\033[0m"; \
-	composer config repositories.sylius composer https://sylius.repo.packagist.com/sylius/ || \
-	  (echo -e "\033[1;31mError: Failed to configure the Sylius repository.\033[0m"; exit 1); \
-	echo -e "\033[1;32mInstalling plugin '$(PLUGIN)'...\033[0m"; \
-	composer require $(PLUGIN) --no-scripts --no-interaction || \
-	  (echo -e "\033[1;31mError: Failed to install plugin '$(PLUGIN)'.\033[0m"; \
-	   echo -e "\033[1;33mCheck the token or plugin name.\033[0m"; \
-	   exit 1); \
+	curl -sf -u token:$$SYLIUS_PACKAGIST_TOKEN https://sylius.repo.packagist.com/sylius/packages.json > /dev/null || { \
+	  echo -e "\033[1;31mError: Invalid token provided. Aborting.\033[0m"; \
+	  exit 1; \
+	}; \
+	\
+	echo -e "\033[1;34m[Sylius Plugin Installer] Configuring Sylius repository...\033[0m"; \
+	composer config repositories.sylius composer https://sylius.repo.packagist.com/sylius/ || { \
+	  echo -e "\033[1;31mError: Failed to configure the Sylius repository.\033[0m"; \
+	  exit 1; \
+	}; \
+	\
+	echo -e "\033[1;34m[Sylius Plugin Installer] Installing plugin '$(PLUGIN)'...\033[0m"; \
+	composer require $(PLUGIN) --no-scripts --no-interaction || { \
+	  echo -e "\033[1;31mError: Failed to install plugin '$(PLUGIN)'.\033[0m"; \
+	  echo -e "\033[1;33mCheck the token or plugin name.\033[0m"; \
+	  exit 1; \
+	}; \
 	echo -e "\033[1;32mPlugin '$(PLUGIN)' installed successfully.\033[0m"; \
-	echo -e "\033[1;32mRunning Rector for code cleanup...\033[0m"; \
-	vendor/bin/rector process src --no-progress-bar --no-diffs || \
-	  (echo -e "\033[1;31mError: Rector process failed.\033[0m"; exit 1); \
+	\
+	echo -e "\033[1;34m[Sylius Plugin Installer] Running Rector for code cleanup...\033[0m"; \
+	vendor/bin/rector process src --no-progress-bar --no-diffs || { \
+	  echo -e "\033[1;31mError: Rector process failed.\033[0m"; \
+	  exit 1; \
+	}; \
 	echo -e "\033[1;32mRector process completed successfully.\033[0m"; \
-
-	echo -e "\033[1;32mWarming up Symfony cache...\033[0m"; \
-	bin/console cache:warmup || \
-	  (echo -e "\033[1;31mError: Cache warmup failed.\033[0m"; exit 1); \
+	\
+	echo -e "\033[1;34m[Sylius Plugin Installer] Warming up Symfony cache...\033[0m"; \
+	bin/console cache:warmup || { \
+	  echo -e "\033[1;31mError: Cache warmup failed.\033[0m"; \
+	  exit 1; \
+	}; \
 	echo -e "\033[1;32mCache warmed up successfully.\033[0m"; \
-
-	echo -e "\033[1;32mRunning migrations...\033[0m"; \
-	bin/console doctrine:migrations:migrate --no-interaction || \
-	  (echo -e "\033[1;31mError: Migrations failed.\033[0m"; exit 1); \
+	\
+	echo -e "\033[1;34m[Sylius Plugin Installer] Running migrations...\033[0m"; \
+	bin/console doctrine:migrations:migrate --no-interaction || { \
+	  echo -e "\033[1;31mError: Migrations failed.\033[0m"; \
+	  exit 1; \
+	}; \
 	echo -e "\033[1;32mMigrations completed successfully.\033[0m"; \
-
-	echo "Copying required Sylius templates..."
-
+	\
+	echo -e "\n\033[1;34m[Sylius Plugin Installer] Copying required Sylius templates...\033[0m"; \
 	TEMPLATES="\
 		bundles/SyliusAdminBundle/Order/Show/Summary/_totals.html.twig \
 		bundles/SyliusAdminBundle/Product/Show/_header.html.twig \
@@ -72,35 +87,44 @@ install-sylius-plugin:
 		bundles/SyliusShopBundle/Common/Form/_login.html.twig \
 		bundles/SyliusShopBundle/Checkout/_header.html.twig \
 		bundles/SyliusShopBundle/Account/Order/Show/_header.html.twig \
-	"
-
+	"; \
 	for file in $$TEMPLATES; do \
-		mkdir -p templates/$$(dirname $$file); \
-		cp vendor/sylius/plus-marketplace-suite-plugin/templates/$$file templates/$$file; \
-	done
-
-	echo "✅ Sylius templates copied successfully."
-
-	echo "DEBUG: Asking user about optional templates..."
-	read -p "Do you want to copy optional marketplace templates (replace Sylius names with marketplace branding, update logos, etc.)? (y/n): " CONFIRM_COPY; \
+	  mkdir -p templates/$$(dirname $$file); \
+	  cp vendor/sylius/plus-marketplace-suite-plugin/templates/$$file templates/$$file; \
+	done; \
+	echo -e "\033[1;32mRequired Sylius templates copied successfully.\033[0m"; \
+	\
+	echo -e "\n\033[1;34m[Sylius Plugin Installer] Asking user about optional templates...\033[0m"; \
+	read -p "Do you want to copy optional marketplace templates (replace Sylius branding/logos, etc.)? [y/n]: " CONFIRM_COPY; \
 	if [ "$$CONFIRM_COPY" = "y" ]; then \
 	  OPTIONAL_TEMPLATES="\
-		bundles/SyliusAdminBundle/Layout/_logo.html.twig \
-		bundles/SyliusAdminBundle/Layout/_notification.html.twig \
-		bundles/SyliusAdminBundle/Security/login.html.twig \
-		bundles/SyliusAdminBundle/layout.html.twig \
-		bundles/SyliusCoreBundle/Email/layout.html.twig \
-		bundles/SyliusUiBundle/Layout/centered.html.twig \
-		bundles/SyliusUiBundle/Security/_logo.html.twig \
-		bundles/TwigBundle/Exception \
-		bundles/SyliusShopBundle/Layout/Header/_logo.html.twig \
-		bundles/SyliusShopBundle/Homepage/_banner.html.twig \
+	    bundles/SyliusAdminBundle/Layout/_logo.html.twig \
+	    bundles/SyliusAdminBundle/Layout/_notification.html.twig \
+	    bundles/SyliusAdminBundle/Security/login.html.twig \
+	    bundles/SyliusAdminBundle/layout.html.twig \
+	    bundles/SyliusCoreBundle/Email/layout.html.twig \
+	    bundles/SyliusUiBundle/Layout/centered.html.twig \
+	    bundles/SyliusUiBundle/Security/_logo.html.twig \
+	    bundles/TwigBundle/Exception \
+	    bundles/SyliusShopBundle/Layout/Header/_logo.html.twig \
+	    bundles/SyliusShopBundle/Homepage/_banner.html.twig \
 	  "; \
 	  for file in $$OPTIONAL_TEMPLATES; do \
-		mkdir -p templates/$$(dirname $$file); \
-		cp vendor/sylius/plus-marketplace-suite-plugin/templates/$$file templates/$$file; \
+	    src="vendor/sylius/plus-marketplace-suite-plugin/templates/$$file"; \
+	    dest="templates/$$file"; \
+	    if [ -d "$$src" ]; then \
+	      mkdir -p "$$dest"; \
+	      cp -r "$$src/"* "$$dest"/; \
+	    else \
+	      mkdir -p "$$(dirname $$dest)"; \
+	      cp "$$src" "$$dest"; \
+	    fi; \
 	  done; \
-	  echo "✅ Optional marketplace templates copied successfully."; \
+	  echo -e "\033[1;32mOptional marketplace templates copied successfully.\033[0m"; \
 	else \
-	  echo "❌ Skipping optional marketplace templates."; \
-	fi
+	  echo -e "\033[1;33mSkipping optional marketplace templates.\033[0m"; \
+	fi; \
+	\
+	echo -e "\n\033[1;34m[Sylius Plugin Installer] Final cache warmup...\033[0m"; \
+	bin/console cache:warmup; \
+	echo -e "\033[1;32mDone! Plugin '$(PLUGIN)' installed.\033[0m"
