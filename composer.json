@@ -89,10 +89,7 @@
         "symfony": {
             "allow-contrib": false,
             "require": "^6.4",
-            "endpoint": [
-                "https://api.github.com/repos/Rafikooo/SyliusRecipes/contents/index.json?ref=flex/main",
-                "flex://defaults"
-            ]
+            "endpoint": ["https://api.github.com/repos/Rafikooo/SyliusRecipes/contents/index.json?ref=flex/main", "flex://defaults"]
         }
     },
     "autoload": {
@@ -150,6 +147,10 @@
         "rector": {
             "type": "path",
             "url": "../SyliusRector"
+        },
+        "marketplace": {
+            "type": "path",
+            "url": "../MarketplaceSuite"
         }
     }
 }
