@@ -1,0 +1,5 @@
+
+# config/routes.yaml
+
+sylius_cms:
+    resource: "@SyliusCmsPlugin/config/routes.yaml"

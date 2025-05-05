@@ -25,6 +25,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "sylius/cms-plugin": "1.0.x-dev",
         "sylius/paypal-plugin": "^2.0",
         "sylius/sylius": "~2.0.0",
         "symfony/dotenv": "^6.4 || ^7.1",
@@ -137,5 +138,11 @@
         "symfony/polyfill-php81": "*",
         "symfony/polyfill-php82": "*",
         "symfony/polyfill-php83": "*"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:Sylius/CmsPlugin.git"
+        }
+    ]
 }

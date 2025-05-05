@@ -190,6 +190,9 @@
     "sylius-labs/doctrine-migrations-extra-bundle": {
         "version": "v0.2.2"
     },
+    "sylius/cms-plugin": {
+        "version": "1.0.x-dev"
+    },
     "sylius/fixtures-bundle": {
         "version": "v1.9.0"
     },
