@@ -280,3 +280,11 @@ sylius_twig_hooks:
         'sylius_shop.base#javascripts':
             app_javascripts:
                 template: 'shop/javascripts.html.twig'
+
+        'sylius_shop.product.show.content.info.overview.accordion.details':
+            kolekcja_traktorow:
+                component: 'sylius_cms.shop:render:collection'
+                props:
+                    code: 'traktory_john_deere'
+                    count_to_render: 4
+                    template: 'ceemes/opis_produktu_z_traktorami.html.twig'
