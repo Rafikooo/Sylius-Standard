@@ -1,0 +1,15 @@
+<h1>Ręczne renderowanie BLOKU start</h1>
+{#{{ sylius_cms_render_page_link('strona_z_traktorami', {name: "Ur momo", style: "background-color: black"}) }}#}
+{#<p>---</p>#}
+{#{{ sylius_cms_get_page_url('strona_z_traktorami') }}#}
+
+{#{{ render(path('sylius_cms_shop_page_show', {'slug' : 'ur-mom'}))}}#}
+
+{{ sylius_cms_render_block('blok_traktorow') }}
+
+{#{{ sylius_cms_render_media('miniaturka') }}#}
+{##}
+{#<h1>Zembedowane czy cos</h1>#}
+{#{{ render(path('sylius_cms_shop_media_render', {'code' : 'miniaturka' })) }}#}
+
+<h1>Ręczne renderowanie BLOKU koniec</h1>

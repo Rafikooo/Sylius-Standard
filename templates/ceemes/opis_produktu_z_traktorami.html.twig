@@ -1,5 +1,7 @@
+{# templates/collection/custom.html.twig #}
 <div>
-        {{ content|raw }}
-
-    Nie wiem o co cho ale przekazałem templejt
+    <p>Customowy template BLOCK start</p>
+{#    {{ sylius_cms_render_block('blok_traktorow', null, {'some_variable': 'some_value'}) }}#}
+    {{ render(path('sylius_cms_shop_media_render', {'code' : 'miniaturka' })) }}
+    <p>Customowy template BLOCK koniec</p>
 </div>
