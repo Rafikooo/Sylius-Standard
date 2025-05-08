@@ -281,43 +281,11 @@ sylius_twig_hooks:
             app_javascripts:
                 template: 'shop/javascripts.html.twig'
 
-#            kolekcja_traktorow:
-#                component: 'sylius_cms.shop:render:collection'
-#                props:
-#                    code: 'traktory_john_deere'
-#                    count_to_render: 1
-#                    template: 'ceemes/opis_produktu_z_traktorami_kolekcja.html.twig'
-
-#            strona_traktorow:
-#                component: 'sylius_cms.shop:render:page_link'
-#                props:
-#                    code: 'strona_z_traktorami'
-##                    template: 'ceemes/opis_produktu_z_traktorami.html.twig'
 
         'sylius_shop.product.show.content.info.overview.accordion.details':
-            blok_traktorow:
+            tractors_block:
                 component: 'sylius_cms.shop:render:block'
                 props:
                     code: 'blok_traktorow'
                     context: '@=_context.resource'
-                        
-#                    template: 'blok_recznie_renderowany.html.twig'
-
-
-
-#        'sylius_shop.product.show.content.info.overview.accordion.details':
-#            media_traktorow:
-#                component: 'sylius_cms.shop:render:media'
-#                props:
-#                    code: 'miniaturka'
-#                    template: 'ceemes/opis_produktu_z_traktorami.html.twig'
-
-
-
-
-
-
-            placeholder_do_recznego_renderowania:
-                template: 'reczne_renderowanie.html.twig'
-
-#
+    
